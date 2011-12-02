@@ -18,7 +18,7 @@
 # limitations under the License.
 
 pkgs = value_for_platform(
-  ["centos","redhat","fedora"] => {
+  ["centos","redhat","fedora","scientific"] => {
     "default" => ["jdk-#{node['java']['version']}-linux-#{node['java']['arch']}.rpm"]
   },
   ["debian","ubuntu"] => {
@@ -49,7 +49,7 @@ when "debian"
   # update-java-alternatives doesn't work with only sun java installed
   node.set['java']['java_home'] = "/usr/lib/jvm/java-6-sun"
 
-when "centos", "redhat", "fedora"
+when "centos", "redhat", "fedora", "scientific"
 
   pkgs.each do |pkg|
     if node['java'].attribute?('rpm_url')
@@ -83,7 +83,7 @@ pkgs.each do |pkg|
     case node['platform']
     when "ubuntu", "debian"
       response_file "java.seed"
-    when "centos", "redhat", "fedora"
+    when "centos", "redhat", "fedora", "scientific"
       source "#{Chef::Config[:file_cache_path]}/#{pkg}" 
       options "--nogpgcheck" # sun/oracle doesn't sign their RPMs o_O
     end
